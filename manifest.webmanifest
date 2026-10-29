@@ -1,0 +1,14 @@
+{
+  "name": "SakuQ — Smart Money Habits",
+  "short_name": "SakuQ",
+  "description": "Atur uang saku, buat anggaran, dan belajar finansial lewat mini games.",
+  "lang": "id-ID",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "theme_color": "#14213d",
+  "background_color": "#f4f7fc",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

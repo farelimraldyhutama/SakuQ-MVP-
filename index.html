@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#14213d">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="description" content="SakuQ membantu pelajar mengatur uang saku, mencatat pengeluaran, dan memantau target tabungan.">
+  <title>SakuQ — Atur uang saku dengan lebih tenang</title>
+  <link rel="stylesheet" href="style.css?v=4">
+  <script src="script.js?v=4" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Navigasi utama">
+      <a class="brand" href="#dashboard" data-page-link="dashboard" aria-label="SakuQ, buka dashboard">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 7.5A2.5 2.5 0 0 1 6.5 5H20v14H6.5A2.5 2.5 0 0 1 4 16.5v-9Z" stroke="currentColor" stroke-width="1.8"/><path d="M4 8h13.5a2.5 2.5 0 0 1 0 5H4" stroke="currentColor" stroke-width="1.8"/><path d="M17.5 10.5h.01" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/></svg>
+        </span>
+        <span class="brand-name">Saku<span>Q</span><small>SMART MONEY HABITS</small></span>
+      </a>
+
+      <div class="sidebar-label">MENU UTAMA</div>
+      <nav class="sidebar-nav">
+        <button class="nav-item active" type="button" data-page="dashboard"><span class="nav-icon" data-icon="grid"></span><span>Dashboard</span></button>
+        <button class="nav-item" type="button" data-page="transactions"><span class="nav-icon" data-icon="receipt"></span><span>Transaksi</span><span class="nav-count" id="transaction-count">0</span></button>
+        <button class="nav-item" type="button" data-page="budgets"><span class="nav-icon" data-icon="sliders"></span><span>Anggaran</span></button>
+        <button class="nav-item" type="button" data-page="goals"><span class="nav-icon" data-icon="target"></span><span>Target tabungan</span></button>
+        <button class="nav-item" type="button" data-page="reports"><span class="nav-icon" data-icon="chart"></span><span>Laporan & tips</span></button>
+        <button class="nav-item" type="button" data-page="games"><span class="nav-icon" data-icon="gamepad"></span><span>Mini games</span><span class="nav-chip">OFFLINE</span></button>
+      </nav>
+
+      <div class="sidebar-note">
+        <div class="note-icon" data-icon="shield"></div>
+        <div><strong>Data tetap di perangkatmu</strong><p>Catatan disimpan di browser ini, bukan dikirim ke server.</p></div>
+      </div>
+      <div class="sidebar-footer">
+        <span class="local-status"><i></i> Penyimpanan lokal aktif</span>
+        <button class="text-button" type="button" id="reset-data">Reset semua data</button>
+        <span class="version-label">SAKUQ · MVP 1.0</span>
+      </div>
+    </aside>
+
+    <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="icon-button mobile-menu" id="menu-toggle" type="button" aria-label="Buka menu" aria-controls="sidebar" aria-expanded="false"><span data-icon="menu"></span></button>
+          <div><p class="eyebrow">RUANG KEUANGANMU</p><p class="topbar-title" id="topbar-title">Dashboard</p></div>
+        </div>
+        <div class="topbar-right">
+          <div class="today-pill"><span data-icon="calendar"></span><span id="current-date">Hari ini</span></div>
+          <button class="button button-primary button-compact" type="button" data-action="add-transaction" aria-label="Catat transaksi"><span data-icon="plus"></span><span>Catat transaksi</span></button>
+        </div>
+      </header>
+
+      <div class="page-wrap">
+        <!-- DASHBOARD -->
+        <section class="page active" id="page-dashboard" data-page-panel="dashboard">
+          <div class="page-heading dashboard-heading">
+            <div><p class="eyebrow accent-eyebrow">SEDIKIT DEMI SEDIKIT, JADI BUKIT</p><h1>Atur uangmu dengan lebih <span>tenang.</span></h1><p class="page-description">Pantau uang saku, pahami kebiasaan belanja, dan melangkah menuju target tabunganmu.</p></div>
+            <div class="heading-actions"><button class="button button-secondary" type="button" data-action="add-goal"><span data-icon="target"></span> Buat target</button></div>
+          </div>
+
+          <div class="welcome-banner" id="welcome-banner">
+            <div class="welcome-copy"><span class="welcome-kicker">MULAI DARI LANGKAH KECIL</span><h2>Kenali uangmu, tentukan prioritasmu.</h2><p>Catat uang saku dan pengeluaran secara rutin. Kamu tidak harus sempurna, cukup mulai dengan konsisten.</p></div>
+            <div class="banner-art" aria-hidden="true"><div class="art-circle art-circle-one"></div><div class="art-circle art-circle-two"></div><div class="art-wallet"><span data-icon="wallet"></span><i></i></div><div class="art-coin coin-one">Rp</div><div class="art-coin coin-two">+</div></div>
+          </div>
+
+          <div class="section-topline"><div><h2>Ringkasan keuangan</h2><p>Gambaran kondisimu saat ini.</p></div><span class="period-tag" id="dashboard-period">Bulan ini</span></div>
+          <div class="summary-grid">
+            <article class="summary-card balance-card"><div class="summary-card-top"><span class="summary-label">Sisa uang tersedia</span><span class="summary-icon" data-icon="wallet"></span></div><p class="summary-value" id="available-balance">Rp0</p><p class="summary-foot" id="balance-caption">Pemasukan dikurangi pengeluaran dan tabungan</p><div class="mini-line"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div></article>
+            <article class="summary-card"><div class="summary-card-top"><span class="summary-label">Pemasukan bulan ini</span><span class="summary-icon icon-green" data-icon="arrow-down-left"></span></div><p class="summary-value" id="monthly-income">Rp0</p><p class="summary-foot positive-foot"><span data-icon="trending-up"></span> Uang yang kamu terima</p></article>
+            <article class="summary-card"><div class="summary-card-top"><span class="summary-label">Pengeluaran bulan ini</span><span class="summary-icon icon-orange" data-icon="arrow-up-right"></span></div><p class="summary-value" id="monthly-expenses">Rp0</p><p class="summary-foot" id="expense-caption">Catatan belanja bulan ini</p></article>
+            <article class="summary-card"><div class="summary-card-top"><span class="summary-label">Tabungan terkumpul</span><span class="summary-icon icon-purple" data-icon="piggy"></span></div><p class="summary-value" id="total-savings">Rp0</p><p class="summary-foot" id="savings-caption">Alokasi tabungan yang dicatat</p></article>
+          </div>
+
+          <div class="dashboard-columns">
+            <section class="surface-card budget-overview">
+              <div class="card-heading"><div><h2>Anggaran bulan ini</h2><p>Pantau pengeluaran per kategori.</p></div><button class="link-button" type="button" data-page="budgets">Atur anggaran <span data-icon="arrow-right"></span></button></div>
+              <div class="budget-list" id="dashboard-budget-list"></div>
+            </section>
+            <section class="surface-card goals-overview">
+              <div class="card-heading"><div><h2>Target tabungan</h2><p>Selangkah lebih dekat ke tujuanmu.</p></div><button class="icon-button small-icon-button" type="button" data-action="add-goal" aria-label="Tambah target"><span data-icon="plus"></span></button></div>
+              <div id="dashboard-goals-list" class="goal-mini-list"></div>
+            </section>
+            <section class="surface-card recent-overview">
+              <div class="card-heading"><div><h2>Transaksi terbaru</h2><p>Aktivitas uang terakhirmu.</p></div><button class="link-button" type="button" data-page="transactions">Lihat semua <span data-icon="arrow-right"></span></button></div>
+              <div id="recent-transactions" class="recent-list"></div>
+            </section>
+            <section class="surface-card tip-card">
+              <div class="tip-top"><span class="tip-symbol" data-icon="lightbulb"></span><span class="tip-label">SAKUQ REMINDER</span></div>
+              <h2>Simpan dulu, sisanya baru digunakan.</h2>
+              <p>Coba tentukan nominal tabungan saat menerima uang saku. Mulai dari jumlah kecil yang realistis untukmu.</p>
+              <button class="tip-link" type="button" data-page="reports">Pelajari tips lainnya <span data-icon="arrow-up-right"></span></button>
+              <div class="tip-decoration" aria-hidden="true">✳</div>
+            </section>
+          </div>
+          <div class="empty-demo-callout" id="demo-callout"><div><strong>Ingin mencoba dulu?</strong><p>Isi website dengan data ilustrasi untuk melihat cara kerja SakuQ.</p></div><button class="button button-secondary" type="button" data-action="load-demo">Coba data contoh</button></div>
+        </section>
+
+        <!-- TRANSACTIONS -->
+        <section class="page" id="page-transactions" data-page-panel="transactions" hidden>
+          <div class="page-heading"><div><p class="eyebrow accent-eyebrow">CATAT DENGAN MUDAH</p><h1>Riwayat <span>transaksi.</span></h1><p class="page-description">Semua pemasukan, pengeluaran, dan setoran tabungan dalam satu tempat.</p></div><button class="button button-primary" type="button" data-action="add-transaction"><span data-icon="plus"></span> Transaksi baru</button></div>
+          <div class="transaction-stats" id="transaction-stats"></div>
+          <section class="surface-card table-card">
+            <div class="table-toolbar"><div><h2>Semua aktivitas</h2><p id="transaction-results-label">0 catatan</p></div><div class="table-filters"><label class="search-box"><span data-icon="search"></span><input id="transaction-search" type="search" placeholder="Cari transaksi..." autocomplete="off"></label><select id="transaction-filter" class="select-control" aria-label="Filter jenis transaksi"><option value="all">Semua jenis</option><option value="income">Pemasukan</option><option value="expense">Pengeluaran</option><option value="saving">Tabungan</option></select></div></div>
+            <div class="table-scroll"><table class="transactions-table"><thead><tr><th>TANGGAL</th><th>DESKRIPSI</th><th>KATEGORI</th><th>NOMINAL</th><th class="actions-heading">AKSI</th></tr></thead><tbody id="transactions-tbody"></tbody></table></div>
+            <div id="transactions-empty" class="empty-state" hidden><div class="empty-icon" data-icon="receipt"></div><h3>Belum ada catatan transaksi</h3><p>Catat uang saku yang diterima atau pengeluaran pertamamu.</p><button class="button button-primary" type="button" data-action="add-transaction"><span data-icon="plus"></span> Catat transaksi</button></div>
+          </section>
+        </section>
+
+        <!-- BUDGETS -->
+        <section class="page" id="page-budgets" data-page-panel="budgets" hidden>
+          <div class="page-heading"><div><p class="eyebrow accent-eyebrow">TENTUKAN BATAS YANG REALISTIS</p><h1>Rencana <span>anggaran.</span></h1><p class="page-description">Atur batas pengeluaran bulanan sesuai kebutuhan dan uang saku yang kamu miliki.</p></div></div>
+          <div class="budget-summary-banner" id="budget-summary-banner"></div>
+          <form id="budget-form" class="budget-editor surface-card">
+            <div class="card-heading budget-editor-heading"><div><h2>Anggaran per kategori</h2><p>Masukkan batas maksimal untuk satu bulan. Isi 0 jika kategori belum digunakan.</p></div><span class="edit-badge"><span data-icon="sliders"></span> Bisa diubah</span></div>
+            <div class="budget-editor-list" id="budget-editor-list"></div>
+            <div class="form-footer"><p>Perubahan berlaku untuk ringkasan bulan ini dan bulan berikutnya.</p><button class="button button-primary" type="submit"><span data-icon="check"></span> Simpan anggaran</button></div>
+          </form>
+          <div class="info-strip"><span data-icon="info"></span><p>Anggaran adalah panduan, bukan hukuman. Jika kebutuhan berubah, sesuaikan rencanamu agar tetap realistis.</p></div>
+        </section>
+
+        <!-- GOALS -->
+        <section class="page" id="page-goals" data-page-panel="goals" hidden>
+          <div class="page-heading"><div><p class="eyebrow accent-eyebrow">SEDIKIT DEMI SEDIKIT</p><h1>Target <span>tabungan.</span></h1><p class="page-description">Buat tujuan yang jelas, lalu pantau progresmu setiap kali menyisihkan uang.</p></div><button class="button button-primary" type="button" data-action="add-goal"><span data-icon="plus"></span> Target baru</button></div>
+          <div class="goal-summary-strip" id="goal-summary-strip"></div>
+          <div class="goals-grid" id="goals-grid"></div>
+          <div class="goal-guidance surface-card"><div class="goal-guidance-icon" data-icon="compass"></div><div><h2>Target yang realistis lebih mudah dijaga.</h2><p>Pilih tujuan yang penting untukmu, tentukan nominalnya, lalu sisihkan uang sesuai kemampuan. Tidak harus besar—yang penting sesuai keadaanmu.</p></div></div>
+        </section>
+
+        <!-- REPORTS -->
+        <section class="page" id="page-reports" data-page-panel="reports" hidden>
+          <div class="page-heading"><div><p class="eyebrow accent-eyebrow">PAHAMI POLA UANGMU</p><h1>Laporan & <span>tips.</span></h1><p class="page-description">Lihat ringkasan aktivitas keuangan dan temukan kebiasaan kecil yang bisa diperbaiki.</p></div><label class="month-picker-label">Periode laporan<input type="month" id="report-month" class="select-control"></label></div>
+          <div class="report-summary-grid" id="report-summary-grid"></div>
+          <div class="report-grid">
+            <section class="surface-card report-chart-card"><div class="card-heading"><div><h2>Pengeluaran per kategori</h2><p id="report-chart-caption">Rincian pengeluaran bulan terpilih.</p></div></div><div id="report-chart" class="report-bars"></div></section>
+            <section class="surface-card report-insight-card"><div class="card-heading"><div><h2>Ringkasan bulan ini</h2><p>Hal yang bisa kamu perhatikan.</p></div><span class="insight-icon" data-icon="sparkles"></span></div><div id="report-insights" class="insight-list"></div></section>
+          </div>
+          <section class="tips-section"><div class="section-topline"><div><h2>Bekal mengatur uang saku</h2><p>Tips sederhana yang bisa dipraktikkan mulai sekarang.</p></div></div><div class="tips-grid">
+            <article class="tip-article"><span class="article-number">01</span><div class="article-icon article-blue" data-icon="list-checks"></div><h3>Catat tanpa menunggu akhir hari</h3><p>Catat transaksi sesaat setelah terjadi agar pengeluaran kecil tidak terlupakan.</p></article>
+            <article class="tip-article"><span class="article-number">02</span><div class="article-icon article-green" data-icon="piggy"></div><h3>Mulai dari target kecil</h3><p>Pilih nominal tabungan yang masih memungkinkan kebutuhan penting tetap terpenuhi.</p></article>
+            <article class="tip-article"><span class="article-number">03</span><div class="article-icon article-orange" data-icon="scale"></div><h3>Bedakan kebutuhan dan keinginan</h3><p>Sebelum membeli sesuatu, beri jeda dan cek apakah pembelian itu sesuai rencana.</p></article>
+            <article class="tip-article"><span class="article-number">04</span><div class="article-icon article-purple" data-icon="calendar-check"></div><h3>Evaluasi setiap minggu</h3><p>Gunakan catatan untuk belajar, bukan menyalahkan diri sendiri. Sesuaikan rencana bila diperlukan.</p></article>
+          </div></section>
+          <div class="disclaimer-note"><span data-icon="shield-check"></span><p>SakuQ adalah alat pencatatan dan edukasi, bukan layanan bank atau penasihat keuangan. Angka bergantung pada transaksi yang kamu masukkan.</p></div>
+        </section>
+
+        <!-- MINI GAMES: dimainkan lokal, tanpa akun dan database -->
+        <section class="page" id="page-games" data-page-panel="games" hidden>
+          <div class="page-heading games-page-heading">
+            <div><p class="eyebrow accent-eyebrow">BELAJAR SAMBIL MAIN</p><h1>Istirahat sebentar, <span>naik level.</span></h1><p class="page-description">Mini games ringan untuk melatih ingatan, keputusan, dan kebiasaan mengatur uang.</p></div>
+            <div class="offline-pill"><span class="offline-dot"></span> Offline · tanpa database</div>
+          </div>
+          <section class="games-hero">
+            <div class="games-hero-copy"><span class="games-kicker">SAKUQ PLAYGROUND</span><h2>Asah skill, bukan cuma saldo.</h2><p>Semua permainan berjalan langsung di browser. Tidak perlu login, koneksi game, atau akun tambahan.</p><div class="games-hero-tags"><span>✦ Gratis dimainkan</span><span>✦ Tanpa data pribadi</span></div></div>
+            <div class="games-hero-art" aria-hidden="true"><span class="game-orbit orbit-a"></span><span class="game-orbit orbit-b"></span><span class="game-star star-a">✦</span><span class="game-star star-b">✧</span><div class="game-trophy">🏆</div><div class="game-coin coin-a">Rp</div><div class="game-coin coin-b">★</div></div>
+          </section>
+          <div class="game-picker-heading"><div><h2>Pilih permainan</h2><p>Ganti permainan kapan saja. Progresnya tidak memengaruhi catatan keuanganmu.</p></div></div>
+          <div class="games-picker" role="tablist" aria-label="Pilih mini game">
+            <button class="game-choice active" type="button" data-game-select="memory" role="tab" aria-selected="true"><span class="game-choice-icon game-icon-blue">🧠</span><span class="game-choice-copy"><strong>Memori Hemat</strong><small>Cari pasangan kartu</small></span><span class="game-choice-arrow">↗</span></button>
+            <button class="game-choice" type="button" data-game-select="quiz" role="tab" aria-selected="false"><span class="game-choice-icon game-icon-purple">⚡</span><span class="game-choice-copy"><strong>Kuis Duit Pintar</strong><small>Uji pengetahuanmu</small></span><span class="game-choice-arrow">↗</span></button>
+            <button class="game-choice" type="button" data-game-select="budget" role="tab" aria-selected="false"><span class="game-choice-icon game-icon-green">🎯</span><span class="game-choice-copy"><strong>Tantangan Anggaran</strong><small>Pilih keputusan terbaik</small></span><span class="game-choice-arrow">↗</span></button>
+          </div>
+          <section class="game-stage surface-card" id="game-stage" aria-live="polite" aria-atomic="false">
+            <div class="game-loading"><span class="game-loading-orb">✦</span><p>Menyiapkan permainan...</p></div>
+          </section>
+          <div class="game-disclaimer"><span class="game-disclaimer-icon">💡</span><p><strong>Belajar tanpa tekanan.</strong> Skor hanya untuk bersenang-senang dan belajar. Tidak ada uang sungguhan, taruhan, atau hadiah berbayar dalam mini games ini.</p></div>
+        </section>
+
+        <footer class="page-footer"><span>Dirancang untuk membantu kebiasaan finansial yang lebih sehat.</span><span>© SakuQ · Prototipe pelajar</span></footer>
+      </div>
+    </main>
+  </div>
+
+  <nav class="mobile-bottom-nav" aria-label="Navigasi cepat">
+    <button class="mobile-nav-item active" type="button" data-page="dashboard"><span data-icon="grid"></span><small>Home</small></button>
+    <button class="mobile-nav-item" type="button" data-page="transactions"><span data-icon="receipt"></span><small>Transaksi</small></button>
+    <button class="mobile-nav-item" type="button" data-page="budgets"><span data-icon="sliders"></span><small>Anggaran</small></button>
+    <button class="mobile-nav-item" type="button" data-page="goals"><span data-icon="target"></span><small>Target</small></button>
+    <button class="mobile-nav-item" type="button" data-page="games"><span data-icon="gamepad"></span><small>Games</small></button>
+  </nav>
+
+  <!-- Dialog transaksi -->
+  <dialog class="app-dialog" id="transaction-dialog" aria-labelledby="transaction-dialog-title">
+    <form id="transaction-form" class="dialog-form">
+      <div class="dialog-header"><div><p class="eyebrow accent-eyebrow">CATAT UANGMU</p><h2 id="transaction-dialog-title">Tambah transaksi</h2><p class="dialog-subtitle">Masukkan detail transaksi agar ringkasanmu tetap akurat.</p></div><button class="icon-button dialog-close" type="button" data-close-dialog="transaction-dialog" aria-label="Tutup dialog"><span data-icon="x"></span></button></div>
+      <input type="hidden" id="transaction-id">
+      <div class="form-field"><label for="transaction-type">Jenis transaksi</label><select id="transaction-type" class="input-control" required><option value="income">Pemasukan</option><option value="expense">Pengeluaran</option></select></div>
+      <div class="form-field"><label for="transaction-amount">Nominal (rupiah)</label><div class="amount-input-wrap"><span>Rp</span><input id="transaction-amount" class="input-control amount-input" type="number" min="1" step="1" inputmode="numeric" placeholder="Contoh: 15000" required></div></div>
+      <div class="form-row"><div class="form-field"><label for="transaction-category">Kategori</label><select id="transaction-category" class="input-control" required></select></div><div class="form-field"><label for="transaction-date">Tanggal</label><input id="transaction-date" class="input-control" type="date" required></div></div>
+      <div class="form-field"><label for="transaction-note">Catatan <span class="optional-label">(opsional)</span></label><input id="transaction-note" class="input-control" type="text" maxlength="80" placeholder="Misalnya: makan siang di kantin"></div>
+      <p class="form-error" id="transaction-error" role="alert" hidden></p>
+      <div class="dialog-actions"><button class="button button-secondary" type="button" data-close-dialog="transaction-dialog">Batal</button><button class="button button-primary" type="submit"><span data-icon="check"></span> Simpan transaksi</button></div>
+    </form>
+  </dialog>
+
+  <!-- Dialog target tabungan -->
+  <dialog class="app-dialog" id="goal-dialog" aria-labelledby="goal-dialog-title">
+    <form id="goal-form" class="dialog-form">
+      <div class="dialog-header"><div><p class="eyebrow accent-eyebrow">TENTUKAN TUJUAN</p><h2 id="goal-dialog-title">Buat target tabungan</h2><p class="dialog-subtitle">Buat target yang sesuai kebutuhan dan kemampuanmu.</p></div><button class="icon-button dialog-close" type="button" data-close-dialog="goal-dialog" aria-label="Tutup dialog"><span data-icon="x"></span></button></div>
+      <div class="form-field"><label for="goal-name">Nama target</label><input id="goal-name" class="input-control" type="text" maxlength="50" placeholder="Contoh: Perlengkapan sekolah" required></div>
+      <div class="form-field"><label for="goal-target-amount">Nominal yang ingin dikumpulkan (rupiah)</label><div class="amount-input-wrap"><span>Rp</span><input id="goal-target-amount" class="input-control amount-input" type="number" min="1" step="1" inputmode="numeric" placeholder="Contoh: 300000" required></div></div>
+      <div class="form-field"><label for="goal-target-date">Target tanggal <span class="optional-label">(opsional)</span></label><input id="goal-target-date" class="input-control" type="date"></div>
+      <p class="form-error" id="goal-error" role="alert" hidden></p>
+      <div class="dialog-actions"><button class="button button-secondary" type="button" data-close-dialog="goal-dialog">Batal</button><button class="button button-primary" type="submit"><span data-icon="target"></span> Simpan target</button></div>
+    </form>
+  </dialog>
+
+  <!-- Dialog setoran tabungan -->
+  <dialog class="app-dialog" id="saving-dialog" aria-labelledby="saving-dialog-title">
+    <form id="saving-form" class="dialog-form">
+      <div class="dialog-header"><div><p class="eyebrow accent-eyebrow">SELANGKAH LEBIH DEKAT</p><h2 id="saving-dialog-title">Catat setoran tabungan</h2><p class="dialog-subtitle" id="saving-goal-subtitle">Tambahkan nominal ke target tabunganmu.</p></div><button class="icon-button dialog-close" type="button" data-close-dialog="saving-dialog" aria-label="Tutup dialog"><span data-icon="x"></span></button></div>
+      <input type="hidden" id="saving-goal-id">
+      <div class="saving-balance-note" id="saving-balance-note"></div>
+      <div class="form-field"><label for="saving-amount">Nominal setoran (rupiah)</label><div class="amount-input-wrap"><span>Rp</span><input id="saving-amount" class="input-control amount-input" type="number" min="1" step="1" inputmode="numeric" placeholder="Contoh: 10000" required></div></div>
+      <div class="form-field"><label for="saving-date">Tanggal setoran</label><input id="saving-date" class="input-control" type="date" required></div>
+      <p class="form-error" id="saving-error" role="alert" hidden></p>
+      <div class="dialog-actions"><button class="button button-secondary" type="button" data-close-dialog="saving-dialog">Batal</button><button class="button button-primary" type="submit"><span data-icon="piggy"></span> Simpan setoran</button></div>
+    </form>
+  </dialog>
+
+  <div class="toast-region" id="toast-region" role="status" aria-live="polite"></div>
+  <noscript><div class="noscript-message">SakuQ membutuhkan JavaScript agar fitur pencatatan dan perhitungan dapat digunakan.</div></noscript>
+</body>
+</html>
